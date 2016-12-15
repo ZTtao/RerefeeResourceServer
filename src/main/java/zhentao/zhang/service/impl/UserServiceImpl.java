@@ -34,4 +34,32 @@ public class UserServiceImpl implements IUserService {
 		return map;
 	}
 
+	@Override
+	public boolean hasUserByNickName(String nickName) {
+		// TODO Auto-generated method stub
+		UserExample example = new UserExample();
+		example.or().andNickNameEqualTo(nickName).andIsDeleteEqualTo(false);
+		List<User> list = mapper.selectByExample(example);
+		if(list.size()>0)return true;
+		else return false;
+	}
+
+	@Override
+	public boolean updateUserInfo(User user) {
+		// TODO Auto-generated method stub
+		UserExample example = new UserExample();
+		example.or().andNickNameEqualTo(user.getNickName()).andIsDeleteEqualTo(false);
+		List<User> list = mapper.selectByExample(example);
+		if(list != null && list.size()>0){
+			user.setUserId(list.get(0).getUserId());
+			user.setIsDelete(false);
+			user.setOther(list.get(0).getOther());
+			user.setPassword(list.get(0).getPassword());
+			user.setRegisterTime(list.get(0).getRegisterTime());
+			int count = mapper.updateByPrimaryKey(user);
+			if(count >= 1)return true;
+			else return false;
+		}else return false;
+	}
+
 }

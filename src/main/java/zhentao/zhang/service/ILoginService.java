@@ -1,5 +1,7 @@
 package zhentao.zhang.service;
 
+import zhentao.zhang.pojo.User;
+
 public interface ILoginService {
-	boolean checkAccountAndPassword(String account,String password);
+	String checkAccountAndPassword(String account,String password);
 }

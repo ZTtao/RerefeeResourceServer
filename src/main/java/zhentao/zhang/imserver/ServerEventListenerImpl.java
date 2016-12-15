@@ -1,13 +1,17 @@
 package zhentao.zhang.imserver;
 
+import javax.annotation.Resource;
+
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 
 import net.openmob.mobileimsdk.server.event.ServerEventListener;
+import zhentao.zhang.service.impl.UserServiceImpl;
 
 public class ServerEventListenerImpl implements ServerEventListener{
-
+	
 	private static Logger logger = LoggerFactory.getLogger(ServerEventListenerImpl.class);
 	@Override
 	public void onTransBuffer_C2C_CallBack(int userId, int from_user_id, String dataContent) {
@@ -33,6 +37,7 @@ public class ServerEventListenerImpl implements ServerEventListener{
 	public void onUserLoginAction_CallBack(int userId, String userName, IoSession session) {
 		// TODO Auto-generated method stub
 		logger.debug("userId:"+userId+" 正在调用回调方法：OnUserLoginAction_CallBack...");
+		
 	}
 
 	@Override

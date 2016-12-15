@@ -21,8 +21,8 @@ public class LoginController {
 	public String loginAPI(HttpServletRequest request){
 		String account = request.getParameter("account");
 		String password = request.getParameter("password");
-		if(loginService.checkAccountAndPassword(account, password))
-		return "µ«¬º≥…π¶";
+		if(!loginService.checkAccountAndPassword(account, password).equals("error"))
+		return loginService.checkAccountAndPassword(account, password);
 		else
 			return "’À∫≈ªÚ√‹¬Î¥ÌŒÛ";
 	}
