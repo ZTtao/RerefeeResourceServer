@@ -26,6 +26,8 @@ public class PostServiceImpl implements IPostService {
 	public String getPostList() {
 		// TODO Auto-generated method stub
 		PostExample example = new PostExample();
+		example.or().andIsDeleteEqualTo(false);
+		example.setOrderByClause("create_time desc");
 		List<Post> list = postMapper.selectByExample(example);
 		int index=0;
 		List<Integer> idList = new ArrayList<Integer>();
@@ -34,13 +36,10 @@ public class PostServiceImpl implements IPostService {
 			index++;
 		}
 		Map<Integer,String> map = userService.getUserNameById(idList);
-		List<Object> map1 = new ArrayList<Object>();
 		int i=0;
-		int userId=0;
 		StringBuilder builder = new StringBuilder();
 		builder.append("[");
 		while(i<list.size()){
-			userId = list.get(i).getUserId();
 			builder.append(",");
 			builder.append("{");
 			builder.append("'title':'");
@@ -67,6 +66,14 @@ public class PostServiceImpl implements IPostService {
 		builder.deleteCharAt(1);
 		builder.append("]");
 		return builder.toString();
+	}
+
+	@Override
+	public boolean addPost(Post post) {
+		// TODO Auto-generated method stub
+		int count = postMapper.insertSelective(post);
+		if(count > 0 )return true;
+		else return false;
 	}
 	
 }

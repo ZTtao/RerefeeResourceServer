@@ -1,14 +1,12 @@
 package zhentao.zhang.imserver;
 
-import javax.annotation.Resource;
+
 
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
 
 import net.openmob.mobileimsdk.server.event.ServerEventListener;
-import zhentao.zhang.service.impl.UserServiceImpl;
 
 public class ServerEventListenerImpl implements ServerEventListener{
 	

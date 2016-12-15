@@ -1,6 +1,6 @@
 package zhentao.zhang.controller;
 
-import java.util.List;
+import java.util.Date;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -9,8 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSON;
-
+import zhentao.zhang.pojo.Post;
 import zhentao.zhang.service.impl.PostServiceImpl;
 
 @Controller
@@ -23,8 +22,14 @@ public class PostController {
 	@ResponseBody
 	@RequestMapping("/addPostAPI")
 	public String addPostAPI(HttpServletRequest request){
-		
-		return "addPostAPI";
+		Post post = new Post();
+		post.setContent(request.getParameter("content"));
+		post.setCreateTime(new Date(Long.parseLong(request.getParameter("createTime"))));
+		post.setIsDelete(false);
+		post.setTitle(request.getParameter("title"));
+		post.setUserId(Integer.parseInt(request.getParameter("userId")));
+		if(postService.addPost(post))return "success";
+		else return "faild";
 	}
 	@ResponseBody
 	@RequestMapping("/getPostAPI")
