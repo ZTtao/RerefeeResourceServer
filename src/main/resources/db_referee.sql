@@ -156,3 +156,14 @@ create table collection(
 	foreign key (user_id) references user(user_id),
 	foreign key (post_id) references post(post_id)
 	)engine=INNODB;
+create table friend(
+	fri_id int not null auto_increment,
+	from_id int not null,
+	to_id int not null,
+	create_time datetime,
+	is_delete boolean,
+	note varchar(255),
+	primary key (fri_id),
+	foreign key (from_id) references user(user_id),
+	foreign key (to_id) references user(user_id)
+)engine=INNODB;

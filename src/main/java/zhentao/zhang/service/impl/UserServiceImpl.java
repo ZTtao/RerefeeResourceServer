@@ -62,4 +62,13 @@ public class UserServiceImpl implements IUserService {
 		}else return false;
 	}
 
+	@Override
+	public int getUserIdByNickName(String nickName) {
+		UserExample example = new UserExample();
+		example.or().andNickNameEqualTo(nickName).andIsDeleteEqualTo(false);
+		List<User> list = mapper.selectByExample(example);
+		if(list != null && list.size() > 0)return list.get(0).getUserId();
+		return -1;
+	}
+
 }

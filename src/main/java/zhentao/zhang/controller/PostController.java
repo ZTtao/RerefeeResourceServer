@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import zhentao.zhang.pojo.Post;
-import zhentao.zhang.service.impl.PostServiceImpl;
+import zhentao.zhang.service.IPostService;
 
 @Controller
 @RequestMapping("/post")
 public class PostController {
 	
 	@Resource
-	private PostServiceImpl postService;
+	private IPostService postService;
 	
 	@ResponseBody
 	@RequestMapping("/addPostAPI")
@@ -43,4 +43,34 @@ public class PostController {
 		return "deletePostAPI";
 	}
 	
+	@ResponseBody
+	@RequestMapping("/isLiked")
+	public String isLiked(HttpServletRequest request){
+		String postId = request.getParameter("postId");
+		String userId = request.getParameter("userId");
+		if(postService.isLiked(Integer.parseInt(postId), Integer.parseInt(userId)))return "true";
+		return "false";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/like")
+	public String like(HttpServletRequest request){
+		String postId = request.getParameter("postId");
+		String userId = request.getParameter("userId");
+		if(postService.like(Integer.parseInt(postId), Integer.parseInt(userId)))
+			return "success";
+		else
+			return "faild";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/cancelLike")
+	public String cancelLike(HttpServletRequest request){
+		String postId = request.getParameter("postId");
+		String userId = request.getParameter("userId");
+		if(postService.cancelLike(Integer.parseInt(postId), Integer.parseInt(userId)))
+			return "success";
+		else
+			return "faild";
+	}
 }

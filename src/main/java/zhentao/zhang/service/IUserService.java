@@ -9,4 +9,5 @@ public interface IUserService {
 	Map<Integer,String> getUserNameById(List<Integer> idList);
 	boolean hasUserByNickName(String nickName);
 	boolean updateUserInfo(User user);
+	int getUserIdByNickName(String nickName);
 }
