@@ -101,6 +101,7 @@ create table referee_reservation(
 	referee_require varchar(50),
 	reward varchar(50),
 	note varchar(255),
+	create_time datetime,
 	is_receive boolean,
 	is_delete boolean,
 	primary key (ref_res_id),

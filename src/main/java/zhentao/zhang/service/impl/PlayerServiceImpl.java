@@ -1,6 +1,8 @@
 package zhentao.zhang.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -51,6 +53,15 @@ public class PlayerServiceImpl implements IPlayerService {
 		}
 		if(count>0)return true;
 		return false;
+	}
+
+	@Override
+	public Map<Integer, Integer> getUserIdByPlayerId(List<Integer> list) {
+		Map<Integer,Integer> map = new HashMap<Integer,Integer>();
+		for(int i=0;i<list.size();i++){
+			map.put(list.get(i), playerMapper.selectByPrimaryKey(list.get(i)).getUserId());
+		}
+		return map;
 	}
 
 }
