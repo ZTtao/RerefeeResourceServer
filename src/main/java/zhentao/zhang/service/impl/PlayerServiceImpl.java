@@ -40,28 +40,51 @@ public class PlayerServiceImpl implements IPlayerService {
 	}
 
 	@Override
-	public boolean addOrUpdatePlayer(Player player) {
-		PlayerExample example = new PlayerExample();
-		example.or().andUserIdEqualTo(player.getUserId());
-		List<Player> list = playerMapper.selectByExample(example);
-		int count=0;
-		if(list != null && list.size()>0){
-			player.setPlayerId(list.get(0).getPlayerId());
-			count = playerMapper.updateByPrimaryKey(player);
+	public String addPlayer(Integer userId,Player player) {
+//		PlayerExample example = new PlayerExample();
+//		example.or().andUserIdEqualTo(player.getUserId());
+//		List<Player> list = playerMapper.selectByExample(example);
+//		int count=0;
+//		if(list != null && list.size()>0){
+//			player.setPlayerId(list.get(0).getPlayerId());
+//			count = playerMapper.updateByPrimaryKey(player);
+//		}else{
+//			count = playerMapper.insertSelective(player);
+//		}
+//		if(count>0)return true;
+//		return false;
+		playerMapper.insertSelective(player);
+		boolean b = userService.setPlayerId(userId, player.getPlayerId());
+		Map<String,String> map = new HashMap<String,String>();
+		if(b){
+			map.put("errorCode", 100+"");
+			map.put("result", player.getPlayerId()+"");
 		}else{
-			count = playerMapper.insertSelective(player);
+			map.put("errorCode", 101+"");
+			map.put("result", "error");
 		}
-		if(count>0)return true;
-		return false;
+		return JSON.toJSONString(map);
 	}
 
 	@Override
 	public Map<Integer, Integer> getUserIdByPlayerId(List<Integer> list) {
 		Map<Integer,Integer> map = new HashMap<Integer,Integer>();
 		for(int i=0;i<list.size();i++){
-			map.put(list.get(i), playerMapper.selectByPrimaryKey(list.get(i)).getUserId());
+//			map.put(list.get(i), playerMapper.selectByPrimaryKey(list.get(i)).getUserId());
 		}
 		return map;
 	}
 
+	@Override
+	public boolean updatePlayer(Player player) {
+		int count = playerMapper.updateByPrimaryKeySelective(player);
+		if(count > 0)return true;
+		return false;
+	}
+	@Override
+	public boolean deletePlayer(Integer playerId){
+		int count = playerMapper.deleteByPrimaryKey(playerId);
+		if(count > 0)return true;
+		return false;
+	}
 }

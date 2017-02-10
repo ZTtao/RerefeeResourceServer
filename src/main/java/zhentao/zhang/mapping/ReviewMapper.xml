@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zhentao.zhang.dao.ReviewMapper">
+    <update id="softDeleteByPrimaryKey" parameterType="java.lang.Integer">
+        update from review
+        set is_delete=true
+        where id=#{reviewId,jdbcType=INTEGER}
+    </update>
+    <select id="selectByClause" resultMap="ResultList">
+        select * from review #{whereClause,jdbcType=VARCHAR}
+    </select>
+    <resultMap id="ResultList" type="zhentao.zhang.pojo.Review">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="time" jdbcType="TIMESTAMP" property="time"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="is_delete" jdbcType="SMALLINT" property="isDelete"/>
+        <association property="user" column="user_id" select="zhentao.zhang.dao.UserMapper.selectByPrimaryKey"/>
+        <association property="post" column="post_id" select="zhentao.zhang.dao.PostMapper.selectByPrimaryKey"/>
+    </resultMap>
+    <insert id="insertSelective" parameterType="zhentao.zhang.pojo.Review" useGeneratedKeys="true" keyProperty="id">
+        insert into review
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="postId != null">
+                post_id,
+            </if>
+            <if test="time != null">
+                time,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="postId != null">
+                #{postId,jdbcType=INTEGER},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=SMALLINT}
+            </if>
+        </trim>
+    </insert>
+    <select id="countByPostId" parameterType="java.lang.Integer">
+        select count(*) from review
+        where post_id=#{postId,jdbcType=INTEGER}
+    </select>
+</mapper>

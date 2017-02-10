@@ -20,12 +20,12 @@ public class LoginServiceImpl implements ILoginService {
 	private UserMapper userMapper;
 	
 	@Override
-	public String checkAccountAndPassword(String account, String password) {
+	public User checkAccountAndPassword(String account, String password) {
 		// TODO Auto-generated method stub
-		UserExample example = new UserExample();
-		example.or().andNickNameEqualTo(account).andPasswordEqualTo(password);
-		List<User> list = userMapper.selectByExample(example);
-		if(list.size()>0)return JSON.toJSONString(list.get(0));
-		else return "error";
+//		UserExample example = new UserExample();
+//		example.or().andNickNameEqualTo(account).andPasswordEqualTo(password);
+		List<User> list = userMapper.selectByPhoneAndPassword(account,password);
+		if(list.size()>0)return list.get(0);
+		else return null;
 	}
 }

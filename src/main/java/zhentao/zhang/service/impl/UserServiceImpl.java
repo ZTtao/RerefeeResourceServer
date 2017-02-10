@@ -45,7 +45,7 @@ public class UserServiceImpl implements IUserService {
 		int index=0;
 		Map<Integer,String> map = new HashMap<Integer,String>();
 		while(index < list.size()){
-			map.put(list.get(index).getUserId(), list.get(index).getNickName());
+//			map.put(list.get(index).getUserId(), list.get(index).getNickName());
 			index++;
 		}
 		return map;
@@ -64,19 +64,19 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public boolean updateUserInfo(User user) {
 		// TODO Auto-generated method stub
-		UserExample example = new UserExample();
-		example.or().andNickNameEqualTo(user.getNickName()).andIsDeleteEqualTo(false);
-		List<User> list = mapper.selectByExample(example);
-		if(list != null && list.size()>0){
-			user.setUserId(list.get(0).getUserId());
-			user.setIsDelete(false);
-			user.setOther(list.get(0).getOther());
-			user.setPassword(list.get(0).getPassword());
-			user.setRegisterTime(list.get(0).getRegisterTime());
-			int count = mapper.updateByPrimaryKey(user);
+//		UserExample example = new UserExample();
+//		example.or().andNickNameEqualTo(user.getNickName()).andIsDeleteEqualTo(false);
+//		List<User> list = mapper.selectByExample(example);
+//		if(list != null && list.size()>0){
+//			user.setUserId(list.get(0).getUserId());
+//			user.setIsDelete(false);
+//			user.setOther(list.get(0).getOther());
+//			user.setPassword(list.get(0).getPassword());
+//			user.setRegisterTime(list.get(0).getRegisterTime());
+			int count = mapper.updateByPrimaryKeySelective(user);
 			if(count >= 1)return true;
 			else return false;
-		}else return false;
+//		}else return false;
 	}
 
 	@Override
@@ -89,20 +89,20 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public List<Map<String,String>> getUserNameLikeCondition(String condition) {
-		UserExample example = new UserExample();
-		example.or().andNickNameLike("%"+condition+"%").andIsDeleteEqualTo(false);
-		List<User> list = mapper.selectByExample(example);
-		Map<String,String> map ;
-		List<Map<String,String>> list1 = new ArrayList<Map<String,String>>();
-		if(list != null)
-		for(int i=0;i<list.size();i++){
-			map = new HashMap<String,String>();
-			map.put("id", list.get(i).getUserId()+"");
-			map.put("name", list.get(i).getNickName());
-			list1.add(map);
-		}
-		return list1;
+	public List<User> getUserNameLikeCondition(String condition) {
+//		UserExample example = new UserExample();
+//		example.or().andNickNameLike("%"+condition+"%").andIsDeleteEqualTo(false);
+		List<User> list = mapper.selectLikeName(condition);
+//		Map<String,String> map ;
+//		List<Map<String,String>> list1 = new ArrayList<Map<String,String>>();
+//		if(list != null)
+//		for(int i=0;i<list.size();i++){
+//			map = new HashMap<String,String>();
+//			map.put("id", list.get(i).getUserId()+"");
+////			map.put("name", list.get(i).getNickName());
+//			list1.add(map);
+//		}
+		return list;
 	}
 
 	@Override
@@ -141,5 +141,33 @@ public class UserServiceImpl implements IUserService {
 		int count = friendMapper.insertSelective(friend);
 		if(count > 0)return true;
 		else return false;
+	}
+
+	@Override
+	public int addUser(User user) {
+		int count = mapper.insertSelective(user);
+		if(count > 0)user.getUserId();
+		return 0;
+	}
+	
+	@Override
+	public boolean setPlayerId(int userId,int playerId){
+		int count = mapper.setPlayerId(userId, playerId);
+		if(count > 0)
+			return true;
+		else return false;
+	}
+	
+	@Override
+	public boolean setRefereeId(int userId,int refereeId){
+		int count = mapper.setRefereeId(userId, refereeId);
+		if(count > 0)
+			return true;
+		else return false;
+	}
+
+	@Override
+	public User getUserById(int userId) {
+		return mapper.selectByPrimaryKey(userId);
 	}
 }

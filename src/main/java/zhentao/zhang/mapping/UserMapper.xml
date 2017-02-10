@@ -1,13 +1,227 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="zhentao.zhang.dao.UserMapper">
+    <select id="countByPhone" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*)
+        from user
+        where phone_number = #{phoneNumber,jdbcType=VARCHAR}
+    </select>
+    <insert id="insertSelective" parameterType="zhentao.zhang.pojo.User" useGeneratedKeys="true" keyProperty="userId">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="nickName != null">
+        nick_name,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="eMail != null">
+        e_mail,
+      </if>
+      <if test="phoneNumber != null">
+        phone_number,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="county != null">
+        county,
+      </if>
+      <if test="player != null">
+        player_id,
+      </if>
+      <if test="referee != null">
+        referee_id,
+      </if>
+      <if test="birthYear != null">
+        birth_year,
+      </if>
+      <if test="birthMonth != null">
+        birth_month,
+      </if>
+      <if test="birthDay != null">
+        birth_day,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="nickName != null">
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="eMail != null">
+        #{eMail,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null">
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="player != null">
+        #{player.playerId,jdbcType=SMALLINT},
+      </if>
+      <if test="referee != null">
+        #{referee.refereeId,jdbcType=SMALLINT},
+      </if>
+      <if test="birthYear != null">
+        #{birthYear,jdbcType=INTEGER},
+      </if>
+      <if test="birthMonth != null">
+        #{birthMonth,jdbcType=INTEGER},
+      </if>
+      <if test="birthDay != null">
+        #{birthDay,jdbcType=INTEGER}
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="zhentao.zhang.pojo.User">
+    update user
+    <set>
+      <if test="nickName != null">
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="eMail != null">
+        e_mail = #{eMail,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null">
+        county = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="player != null">
+        player_id = #{player.playerId,jdbcType=INTEGER},
+      </if>
+      <if test="referee != null">
+        referee_id = #{referee.refereeId,jdbcType=INTEGER},
+      </if>
+      <if test="birthYear != null">
+        birth_year = #{birthYear,jdbcType=INTEGER},
+      </if>
+      <if test="birthMonth != null">
+        birth_month = #{birthMonth,jdbcType=INTEGER},
+      </if>
+      <if test="birthDay != null">
+        birth_day = #{birthDay,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="setPlayerId">
+    update user
+    set player_id = #{playerId,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="setRefereeId">
+    update user
+    set referee_id = #{refereeId,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPhoneAndPassword" resultMap="ResultList">
+    select * from user
+    where phone_number = #{phoneNumber,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+  </select>
+  <select id="selectLikeName" resultMap="ResultList">
+    select * from user
+    where nick_name like CONCAT("%",#{nickName,jdbcType=VARCHAR},"%")
+  </select>
+  <resultMap id="ResultList" type="zhentao.zhang.pojo.User">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="time" jdbcType="TIMESTAMP" property="time"></result>
+    <result column="name" jdbcType="VARCHAR" property="name"></result>
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName"></result>
+    <result column="e_mail" jdbcType="VARCHAR" property="eMail"></result>
+    <result column="province" jdbcType="VARCHAR" property="province"></result>
+    <result column="city" jdbcType="VARCHAR" property="city"></result>
+    <result column="county" jdbcType="VARCHAR" property="county"></result>
+    <result column="address" jdbcType="VARCHAR" property="address"></result>
+    <result column="birth_year" jdbcType="INTEGER" property="birthYear"></result>
+    <result column="gender" jdbcType="INTEGER" property="gender"></result>
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber"></result>
+    <association property="player" column="player_id" select="zhentao.zhang.dao.PlayerMapper.selectByPrimaryKey"></association>
+    <association property="referee" column="referee_id" select="zhentao.zhang.dao.RefereeMapper.selectByPrimaryKey"></association>
+  </resultMap>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultList">
+    select 
+    *
+    from user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+
+
+
+
+
+
   <resultMap id="BaseResultMap" type="zhentao.zhang.pojo.User">
     <!--
       WARNING - @mbggenerated
       This element is automatically generated by MyBatis Generator, do not modify.
     -->
     <id column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <!-- <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
     <result column="real_name" jdbcType="VARCHAR" property="realName" />
     <result column="gender" jdbcType="VARCHAR" property="gender" />
     <result column="height" jdbcType="REAL" property="height" />
@@ -19,7 +233,7 @@
     <result column="register_time" jdbcType="TIMESTAMP" property="registerTime" />
     <result column="is_delete" jdbcType="BIT" property="isDelete" />
     <result column="other" jdbcType="VARCHAR" property="other" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
+     --><result column="password" jdbcType="VARCHAR" property="password" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -114,16 +328,7 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--
-      WARNING - @mbggenerated
-      This element is automatically generated by MyBatis Generator, do not modify.
-    -->
-    select 
-    <include refid="Base_Column_List" />
-    from user
-    where user_id = #{userId,jdbcType=INTEGER}
-  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--
       WARNING - @mbggenerated
@@ -158,101 +363,7 @@
       #{registerTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=BIT}, #{other,jdbcType=VARCHAR}, 
       #{password,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="zhentao.zhang.pojo.User">
-    <!--
-      WARNING - @mbggenerated
-      This element is automatically generated by MyBatis Generator, do not modify.
-    -->
-    insert into user
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="nickName != null">
-        nick_name,
-      </if>
-      <if test="realName != null">
-        real_name,
-      </if>
-      <if test="gender != null">
-        gender,
-      </if>
-      <if test="height != null">
-        height,
-      </if>
-      <if test="weight != null">
-        weight,
-      </if>
-      <if test="email != null">
-        email,
-      </if>
-      <if test="phone != null">
-        phone,
-      </if>
-      <if test="address != null">
-        address,
-      </if>
-      <if test="note != null">
-        note,
-      </if>
-      <if test="registerTime != null">
-        register_time,
-      </if>
-      <if test="isDelete != null">
-        is_delete,
-      </if>
-      <if test="other != null">
-        other,
-      </if>
-      <if test="password != null">
-        password,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="nickName != null">
-        #{nickName,jdbcType=VARCHAR},
-      </if>
-      <if test="realName != null">
-        #{realName,jdbcType=VARCHAR},
-      </if>
-      <if test="gender != null">
-        #{gender,jdbcType=VARCHAR},
-      </if>
-      <if test="height != null">
-        #{height,jdbcType=REAL},
-      </if>
-      <if test="weight != null">
-        #{weight,jdbcType=REAL},
-      </if>
-      <if test="email != null">
-        #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="phone != null">
-        #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="address != null">
-        #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="note != null">
-        #{note,jdbcType=VARCHAR},
-      </if>
-      <if test="registerTime != null">
-        #{registerTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDelete != null">
-        #{isDelete,jdbcType=BIT},
-      </if>
-      <if test="other != null">
-        #{other,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null">
-        #{password,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+  
   <select id="countByExample" parameterType="zhentao.zhang.pojo.UserExample" resultType="java.lang.Integer">
     <!--
       WARNING - @mbggenerated
@@ -341,55 +452,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="zhentao.zhang.pojo.User">
-    <!--
-      WARNING - @mbggenerated
-      This element is automatically generated by MyBatis Generator, do not modify.
-    -->
-    update user
-    <set>
-      <if test="nickName != null">
-        nick_name = #{nickName,jdbcType=VARCHAR},
-      </if>
-      <if test="realName != null">
-        real_name = #{realName,jdbcType=VARCHAR},
-      </if>
-      <if test="gender != null">
-        gender = #{gender,jdbcType=VARCHAR},
-      </if>
-      <if test="height != null">
-        height = #{height,jdbcType=REAL},
-      </if>
-      <if test="weight != null">
-        weight = #{weight,jdbcType=REAL},
-      </if>
-      <if test="email != null">
-        email = #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="phone != null">
-        phone = #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="address != null">
-        address = #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="note != null">
-        note = #{note,jdbcType=VARCHAR},
-      </if>
-      <if test="registerTime != null">
-        register_time = #{registerTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDelete != null">
-        is_delete = #{isDelete,jdbcType=BIT},
-      </if>
-      <if test="other != null">
-        other = #{other,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null">
-        password = #{password,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where user_id = #{userId,jdbcType=INTEGER}
-  </update>
+  
   <update id="updateByPrimaryKey" parameterType="zhentao.zhang.pojo.User">
     <!--
       WARNING - @mbggenerated

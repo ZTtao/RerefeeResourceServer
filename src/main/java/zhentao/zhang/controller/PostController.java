@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
+
 import zhentao.zhang.pojo.Post;
 import zhentao.zhang.service.IPostService;
 
@@ -20,27 +22,26 @@ public class PostController {
 	private IPostService postService;
 	
 	@ResponseBody
-	@RequestMapping("/addPostAPI")
-	public String addPostAPI(HttpServletRequest request){
-		Post post = new Post();
-		post.setContent(request.getParameter("content"));
-		post.setCreateTime(new Date(Long.parseLong(request.getParameter("createTime"))));
-		post.setIsDelete(false);
-		post.setTitle(request.getParameter("title"));
-		post.setUserId(Integer.parseInt(request.getParameter("userId")));
-		if(postService.addPost(post))return "success";
-		else return "faild";
+	@RequestMapping("/savePost")
+	public String savePost(Post post){
+		return JSON.toJSONString(postService.addPost(post));
 	}
 	@ResponseBody
 	@RequestMapping("/getPostAPI")
-	public String getPostAPI(HttpServletRequest request){
-		return postService.getPostList();
+	public String getPostAPI(String whereClause,String orderByClause,String limitClause){
+		return JSON.toJSONString(postService.getPostList(whereClause,orderByClause,limitClause));
 	}
+	
 	@ResponseBody
-	@RequestMapping("/deletePostAPI")
-	public String deletePostAPI(HttpServletRequest request){
-		
-		return "deletePostAPI";
+	@RequestMapping("/getPost")
+	public String getPost(Integer postId){
+		return JSON.toJSONString(postService.getPostById(postId));
+	}
+	
+	@ResponseBody
+	@RequestMapping("/deletePost")
+	public String deletePostAPI(Integer postId){
+		return JSON.toJSONString(postService.deletePost(postId));
 	}
 	
 	@ResponseBody

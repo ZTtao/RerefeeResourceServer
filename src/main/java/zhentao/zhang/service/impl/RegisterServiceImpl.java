@@ -19,10 +19,10 @@ public class RegisterServiceImpl implements IRegisterService {
 	@Override
 	public boolean addUser(User user) {
 		// TODO Auto-generated method stub
-		UserExample example = new UserExample();
-		example.or().andNickNameEqualTo(user.getNickName()).andIsDeleteEqualTo(false);
-		List<User> list = userMapper.selectByExample(example);
-		if(list != null & list.size()>0)return false;
+//		UserExample example = new UserExample();
+//		example.or().andNickNameEqualTo(user.getNickName()).andIsDeleteEqualTo(false);
+		int count = userMapper.countByPhone(user.getPhoneNumber());
+		if(count > 0)return false;
 		else{
 			userMapper.insertSelective(user);
 			return true;

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zhentao.zhang.dao.FindRefereeMessageMapper">
+    <insert id="insertSelective" parameterType="zhentao.zhang.pojo.FindRefereeMessage" useGeneratedKeys="true" keyProperty="id">
+        insert into find_referee_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="gameState != null">
+                game_state,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="time != null">
+                time,
+            </if>
+            <if test="refereeCount != null">
+                referee_count,
+            </if>
+            <if test="refereeClaim != null">
+                referee_claim,
+            </if>
+            <if test="pay != null">
+                pay,
+            </if>
+            <if test="note != null">
+                note,
+            </if>
+            <if test="publishTime != null">
+                publish_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="gameState != null">
+                #{gameState,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="refereeCount != null">
+                #{refereeCount,jdbcType=INTEGER},
+            </if>
+            <if test="refereeClaim != null">
+                #{refereeClaim,jdbcType=VARCHAR},
+            </if>
+            <if test="pay != null">
+                #{pay,jdbcType=VARCHAR},
+            </if>
+            <if test="note != null">
+                #{note,jdbcType=VARCHAR},
+            </if>
+            <if test="publishTime != null">
+                #{publishTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </insert>
+    
+    <select id="selectByCondition" resultMap="ResultMap">
+        select * from find_referee_message
+        #{whereClause,jdbcType=VARCHAR}
+        #{orderByClause,jdbcType=VARCHAR}
+        #{limitClause,jdbcType=VARCHAR}
+    </select>
+    <resultMap type="zhentao.zhang.pojo.FindRefereeMessage" id="ResultMap">
+        <id column="id" property="id" jdbcType="Integer"/>
+        <association property="user" column="user_id" select="zhentao.zhang.dao.UserMapper.selectByPrimaryKey"></association>
+        <result column="game_state" property="gameState" jdbcType="Integer"/>
+        <result column="address" property="address" jdbcType="varchar"/>
+        <result column="time" property="time" jdbcType="timestamp"/>
+        <result column="referee_count" property="refereeCount" jdbcType="Integer"/>
+        <result column="referee_claim" property="refereeClaim" jdbcType="varchar"/>
+        <result column="pay" property="pay" jdbcType="varchar"/>
+        <result column="note" property="note" jdbcType="varchar"/>
+        <result column="publish_time" property="publishTime" jdbcType="timestamp"/>
+        <result column="is_accept" property="isAccept" jdbcType="smallint"/>
+        <result column="apply_count" property="applyCount" jdbcType="Integer"/>
+        <result column="read_count" property="readCount" jdbcType="Integer"/>
+        <result column="accept_count" property="acceptCount" jdbcType="Integer"/>
+        <result column="is_delete" property="isDelete" jdbcType="smallint"/>
+    </resultMap>
+    <update id="updateReadCount" parameterType="java.lang.Integer">
+        update from find_referee_message
+        set read_count = read_count+1
+        where id=#{messageId,jdbcType=INTEGER}
+    </update>
+</mapper>
